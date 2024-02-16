@@ -1,24 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
+import { ChakraProvider, Stat, StatLabel, StatNumber, StatGroup } from "@chakra-ui/react";
+
+const upbitTradePrice = 300000;
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ChakraProvider>
+      <StatGroup>
+        <Stat>
+          <StatLabel>업비트 BTC 가격</StatLabel>
+          <StatNumber>{upbitTradePrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} KRW</StatNumber>
+        </Stat>
+      </StatGroup>
+    </ChakraProvider>
   );
 }
 
