@@ -12,15 +12,37 @@ function App() {
   useEffect(() => {
     fetchUpbitMarketData()
       .then((upbitMarketCodes) => {
-        const upbitSocket = connectToUpbitWebSocket(upbitMarketCodes, setUpbitTradePrices);
-        return () => upbitSocket.close();
+        // 패치된 업비트 마켓 코드를 콘솔에 출력
+        console.log("Fetched Upbit market codes:", upbitMarketCodes);
+
+        // 웹소켓 연결 및 데이터 처리
+        const upbitSocket = connectToUpbitWebSocket(upbitMarketCodes, (upbitData) => {
+          setUpbitTradePrices(upbitData);
+        });
+
+        // 컴포넌트 언마운트 시 웹소켓 종료 함수 반환
+        return () => {
+          console.log("Closing WebSocket to Upbit");
+          upbitSocket.close();
+        };
       })
       .catch((error) => console.error("Error fetching data from Upbit API:", error));
 
     fetchBithumbMarketData()
       .then((bithumbMarketCodes) => {
-        const bithumbSocket = connectToBithumbWebSocket(bithumbMarketCodes, setBithumbTradePrices);
-        return () => bithumbSocket.close();
+        // 패치된 빗썸 마켓 코드를 콘솔에 출력
+        console.log("Fetched Bithumb market codes:", bithumbMarketCodes);
+
+        // 웹소켓 연결 및 데이터 처리
+        const bithumbSocket = connectToBithumbWebSocket(bithumbMarketCodes, (bithumbData) => {
+          setBithumbTradePrices(bithumbData);
+        });
+
+        // 컴포넌트 언마운트 시 웹소켓 종료 함수 반환
+        return () => {
+          console.log("Closing WebSocket to Bithumb");
+          bithumbSocket.close();
+        };
       })
       .catch((error) => console.error("Error fetching market codes from Bithumb", error));
   }, []);
