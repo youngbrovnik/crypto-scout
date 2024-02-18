@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/crypto-scout/static/js/main.931d34c8.js",
+    "main.js": "/crypto-scout/static/js/main.0c31e65c.js",
     "index.html": "/crypto-scout/index.html",
-    "main.931d34c8.js.map": "/crypto-scout/static/js/main.931d34c8.js.map"
+    "main.0c31e65c.js.map": "/crypto-scout/static/js/main.0c31e65c.js.map"
   },
   "entrypoints": [
-    "static/js/main.931d34c8.js"
+    "static/js/main.0c31e65c.js"
   ]
 }
