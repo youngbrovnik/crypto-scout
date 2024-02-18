@@ -23,8 +23,9 @@ export function connectToUpbitWebSocket(upbitMarketCodes, setUpbitTradePrices) {
           ...prevPrices,
           [data.code]: {
             ...prevPrices[data.code],
-            price: data.trade_price,
-            exchange: "upbit", // 'upbit' 식별자 추가
+            upbit: {
+              currentPrice: data.trade_price, // 'upbit' 키 사용
+            },
           },
         }));
       };
@@ -67,14 +68,14 @@ export function connectToBithumbWebSocket(bithumbMarketCodes, setBithumbTradePri
     const response = JSON.parse(event.data);
     if (response.type === "transaction") {
       response.content.list.forEach((transaction) => {
-        // "BTC_KRW" 형태의 심볼을 "KRW-BTC"로 변환
         const symbolConverted = transaction.symbol.split("_").reverse().join("-");
         setBithumbTradePrices((prevPrices) => ({
           ...prevPrices,
           [symbolConverted]: {
             ...prevPrices[symbolConverted],
-            price: transaction.contPrice,
-            exchange: "bithumb", // 'bithubm' 식별자 추가
+            bithumb: {
+              currentPrice: transaction.contPrice, // 'bithumb' 키 사용
+            },
           },
         }));
       });

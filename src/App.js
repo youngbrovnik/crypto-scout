@@ -53,11 +53,13 @@ function App() {
   return (
     <ChakraProvider>
       <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-        {Object.entries(tradePrices).map(([code, info]) => (
+        {Object.entries(tradePrices).map(([code, { upbit, bithumb }]) => (
           <Box p={5} shadow="md" borderWidth="1px" key={code}>
             <Text mb={2}>{code}</Text>
-            <Text mb={2}>업비트: {info.exchange === "upbit" ? info.price : "데이터 없음"}</Text>
-            <Text mb={2}>빗썸: {info.exchange === "bithumb" ? info.price : "데이터 없음"}</Text>
+            {/* 업비트 가격 정보 접근 방식 수정 */}
+            <Text mb={2}>업비트: {upbit ? upbit.currentPrice : "데이터 없음"}</Text>
+            {/* 빗썸 가격 정보 접근 방식 수정 */}
+            <Text mb={2}>빗썸: {bithumb ? bithumb.currentPrice : "데이터 없음"}</Text>
           </Box>
         ))}
       </Grid>
