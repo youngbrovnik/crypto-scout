@@ -32,6 +32,6 @@ export const fetchBithumbMarketData = () => {
         throw new Error("Response status is not ok");
       }
       const data = response.data;
-      return Object.keys(data).map((key) => `${key}_KRW`);
+      return Object.keys(data).map((key) => `KRW-${key}`);
     });
 };
