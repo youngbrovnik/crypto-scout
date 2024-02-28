@@ -92,3 +92,42 @@ export function connectToBithumbWebSocket(bithumbMarketCodes, setBithumbTradePri
 
   return socket;
 }
+
+export function connectToBinanceWebSocket(marketCodes, setBinanceTradePrices) {
+  // 마켓 코드 변환 함수
+  const convertMarketCode = (code) => {
+    return code.toLowerCase().replace("krw-", "") + "usdt";
+  };
+
+  marketCodes.forEach((code) => {
+    const symbol = convertMarketCode(code);
+    const wsUrl = `wss://stream.binance.com:9443/ws/${symbol}@trade`;
+
+    const socket = new WebSocket(wsUrl);
+
+    socket.onopen = () => {
+      console.log(`WebSocket Connected to Binance for ${symbol}`);
+    };
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      setBinanceTradePrices((prevPrices) => ({
+        ...prevPrices,
+        [code]: {
+          ...prevPrices[code],
+          binance: {
+            currentPrice: parseFloat(data.p), // Binance에서 제공하는 최신 가격 정보
+          },
+        },
+      }));
+    };
+
+    socket.onerror = (error) => {
+      console.error(`WebSocket Error with Binance for ${symbol}:`, error);
+    };
+
+    socket.onclose = () => {
+      console.log(`WebSocket Disconnected from Binance for ${symbol}`);
+    };
+  });
+}
