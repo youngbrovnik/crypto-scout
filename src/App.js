@@ -86,6 +86,19 @@ function App() {
     fetchDataAndConnect();
   }, []);
 
+  function calculateMinPrice(upbit, bithumb, binance, usdtPrice) {
+    // 존재하는 가격들을 배열에 담기
+    const prices = [];
+    if (upbit && upbit.currentPrice) prices.push(upbit.currentPrice);
+    if (bithumb && bithumb.currentPrice) prices.push(bithumb.currentPrice);
+    if (binance && binance.currentPrice && usdtPrice) prices.push(binance.currentPrice * usdtPrice);
+
+    // 최소값 계산
+    const minPrice = prices.length > 0 ? Math.min(...prices) : null;
+
+    return minPrice;
+  }
+
   return (
     <ChakraProvider>
       <Grid templateColumns="repeat(2, 1fr)" gap={6}>
@@ -93,11 +106,7 @@ function App() {
           <Box p={5} shadow="md" borderWidth="1px" key={code}>
             <Text mb={2}>{code}</Text>
             <StatGroup>
-              <Text hidden="true">
-                {upbit && bithumb && binance
-                  ? (minPrice = Math.min(upbit.currentPrice, bithumb.currentPrice, binance.currentPrice * usdtPrice))
-                  : ""}
-              </Text>
+              <Text hidden="true">{(minPrice = calculateMinPrice(upbit, bithumb, binance, usdtPrice))}</Text>
               <Stat>
                 <StatLabel>Upbit</StatLabel>
                 <StatNumber>
@@ -108,16 +117,8 @@ function App() {
                     : "데이터 없음"}
                 </StatNumber>
                 <StatHelpText>
-                  <StatArrow
-                    type={
-                      upbit && bithumb && binance
-                        ? (upbit.currentPrice - minPrice) / minPrice >= 0
-                          ? "increase"
-                          : "decrease"
-                        : "데이터 없음"
-                    }
-                  />
-                  {upbit && bithumb && binance
+                  <StatArrow type={upbit ? "increase" : "decrease"} />
+                  {upbit
                     ? `${new Intl.NumberFormat("ko-KR", {
                         style: "percent",
                         minimumFractionDigits: 2,
@@ -136,16 +137,8 @@ function App() {
                     : "데이터 없음"}
                 </StatNumber>
                 <StatHelpText>
-                  <StatArrow
-                    type={
-                      upbit && bithumb && binance
-                        ? (bithumb.currentPrice - minPrice) / minPrice >= 0
-                          ? "increase"
-                          : "decrease"
-                        : "데이터 없음"
-                    }
-                  />
-                  {upbit && bithumb && binance
+                  <StatArrow type={bithumb ? "increase" : "decrease"} />
+                  {bithumb
                     ? `${new Intl.NumberFormat("ko-KR", {
                         style: "percent",
                         minimumFractionDigits: 2,
@@ -164,16 +157,8 @@ function App() {
                     : "데이터 없음"}
                 </StatNumber>
                 <StatHelpText>
-                  <StatArrow
-                    type={
-                      upbit && bithumb && binance
-                        ? (binance.currentPrice * usdtPrice - minPrice) / minPrice >= 0
-                          ? "increase"
-                          : "decrease"
-                        : "데이터 없음"
-                    }
-                  />
-                  {upbit && bithumb && binance
+                  <StatArrow type={binance ? "increase" : "decrease"} />
+                  {binance
                     ? `${new Intl.NumberFormat("ko-KR", {
                         style: "percent",
                         minimumFractionDigits: 2,
