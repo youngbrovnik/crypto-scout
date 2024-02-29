@@ -59,3 +59,20 @@ export const fetchBinanceMarketData = () => {
       throw error;
     });
 };
+
+export async function fetchUsdtPrice() {
+  try {
+    const response = await fetch("https://api.bithumb.com/public/ticker/usdt_KRW");
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    if (data.status !== "0000") {
+      throw new Error("Response status is not ok");
+    }
+    return data.data.closing_price;
+  } catch (error) {
+    console.error("Error fetching USDT price:", error);
+    return null; // 또는 적절한 오류 처리
+  }
+}

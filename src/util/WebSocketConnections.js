@@ -105,10 +105,6 @@ export function connectToBinanceWebSocket(marketCodes, setBinanceTradePrices) {
 
     const socket = new WebSocket(wsUrl);
 
-    socket.onopen = () => {
-      console.log(`WebSocket Connected to Binance for ${symbol}`);
-    };
-
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       setBinanceTradePrices((prevPrices) => ({
