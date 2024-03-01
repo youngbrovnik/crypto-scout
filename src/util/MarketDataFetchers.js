@@ -50,7 +50,7 @@ export const fetchBinanceMarketData = () => {
       // quoteAsset가 'USDT'인 심볼만 필터링
       const symbolsWithUSDT = data.symbols
         .filter((symbol) => symbol.quoteAsset === "USDT")
-        .map((symbol) => symbol.symbol);
+        .map((symbol) => `KRW-${symbol.baseAsset}`);
 
       return symbolsWithUSDT;
     })

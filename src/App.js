@@ -48,11 +48,18 @@ function App() {
         console.log("Fetched Upbit market codes:", upbitMarketCodes);
         console.log("Fetched Bithumb market codes:", bithumbMarketCodes);
         console.log("Fetched Binance market codes:", binanceMarketCodes);
-        console.log("USDT Price: ", usdtPrice);
 
-        // 업비트 마켓 코드를 Set으로 변환하여 공통 마켓 코드 확인
-        const upbitMarketCodesSet = new Set(upbitMarketCodes);
-        const commonMarketCodes = bithumbMarketCodes.filter((code) => upbitMarketCodesSet.has(code));
+        // 세 배열의 마켓 코드를 모두 합친 후, 각 마켓 코드별 등장 횟수를 계산합니다.
+        const allMarketCodes = [...upbitMarketCodes, ...bithumbMarketCodes, ...binanceMarketCodes];
+        const marketCodeCounts = allMarketCodes.reduce((acc, code) => {
+          acc[code] = (acc[code] || 0) + 1;
+          return acc;
+        }, {});
+
+        // 등장 횟수가 2 이상인 마켓 코드만 필터링합니다.
+        const commonMarketCodes = Object.entries(marketCodeCounts)
+          .filter(([code, count]) => count >= 2)
+          .map(([code, count]) => code);
         console.log("Common market codes:", commonMarketCodes);
 
         // 업비트 웹소켓 연결 및 데이터 업데이트
@@ -106,7 +113,7 @@ function App() {
           <Box p={5} shadow="md" borderWidth="1px" key={code}>
             <Text mb={2}>{code}</Text>
             <StatGroup>
-              <Text hidden="true">{(minPrice = calculateMinPrice(upbit, bithumb, binance, usdtPrice))}</Text>
+              <Text hidden={true}>{(minPrice = calculateMinPrice(upbit, bithumb, binance, usdtPrice))}</Text>
               <Stat>
                 <StatLabel>Upbit</StatLabel>
                 <StatNumber>
