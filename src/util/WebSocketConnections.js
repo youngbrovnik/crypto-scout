@@ -93,7 +93,7 @@ export function connectToBithumbWebSocket(bithumbMarketCodes, setBithumbTradePri
   return socket;
 }
 
-export function connectToBinanceWebSocket(marketCodes, setBinanceTradePrices) {
+export function connectToBinanceWebSocket(marketCodes, setBinanceTradePrices, usdtPrice) {
   // 마켓 코드 변환 함수
   const convertMarketCode = (code) => {
     return code.toLowerCase().replace("krw-", "") + "usdt";
@@ -112,7 +112,8 @@ export function connectToBinanceWebSocket(marketCodes, setBinanceTradePrices) {
         [code]: {
           ...prevPrices[code],
           binance: {
-            currentPrice: parseFloat(data.p), // Binance에서 제공하는 최신 가격 정보
+            currentPrice: parseFloat(data.p) * usdtPrice, // Binance에서 제공하는 최신 가격 정보
+            usdtPrice: usdtPrice,
           },
         },
       }));
