@@ -16,7 +16,7 @@ import {
   fetchUpbitMarketData,
   fetchBithumbMarketData,
   fetchBinanceMarketData,
-  fetchUsdtPrice,
+  fetchUsdToKrwRate,
 } from "./util/MarketDataFetchers";
 import {
   connectToUpbitWebSocket,
@@ -35,7 +35,7 @@ function App() {
           fetchUpbitMarketData(),
           fetchBithumbMarketData(),
           fetchBinanceMarketData(),
-          fetchUsdtPrice(),
+          fetchUsdToKrwRate(),
         ]);
 
         // 결과 출력

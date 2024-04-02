@@ -60,19 +60,19 @@ export const fetchBinanceMarketData = () => {
     });
 };
 
-export async function fetchUsdtPrice() {
+export async function fetchUsdToKrwRate() {
   try {
-    const response = await fetch("https://api.bithumb.com/public/ticker/usdt_KRW");
+    const response = await fetch("https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD");
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
     const data = await response.json();
-    if (data.status !== "0000") {
-      throw new Error("Response status is not ok");
+    if (data.length === 0 || data[0].code !== "FRX.KRWUSD") {
+      throw new Error("Invalid response data");
     }
-    return data.data.closing_price;
+    return data[0].basePrice;
   } catch (error) {
-    console.error("Error fetching USDT price:", error);
+    console.error("Error fetching USD to KRW rate:", error);
     return null; // 또는 적절한 오류 처리
   }
 }
